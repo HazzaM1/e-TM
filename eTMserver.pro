@@ -2,8 +2,14 @@ QT += \
     network
 
 HEADERS += \
-    sockettest.h
+    include/sockettest.h
 
 SOURCES += \
-    main.cpp \
-    sockettest.cpp
+    src/main.cpp \
+    src/sockettest.cpp
+
+INCLUDEPATH += \
+    headers/ include \
+
+OBJECTS_DIR = $$_PRO_FILE_PWD_/bin/
+DESTDIR = $$_PRO_FILE_PWD_/bin/
