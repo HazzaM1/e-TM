@@ -22,6 +22,7 @@ class SocketTest : public QObject
     public slots:
 
     private:
+        void tcpReady();
         const QString placeholder_url = "https://pastebin.com/raw/YjYEUC6K";
         QString GET(QString url), connect_url;
         QTcpSocket* socket = new QTcpSocket(this);
