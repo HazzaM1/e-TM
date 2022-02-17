@@ -1,5 +1,5 @@
 #include <QCoreApplication>
-#include "sockettest.h"
+#include "servertest.h"
 
 int main(int argc, char *argv[])
 {
