@@ -2,11 +2,11 @@ QT += \
     network
 
 HEADERS += \
-    include/sockettest.h
+    include/servertest.h
 
 SOURCES += \
     src/main.cpp \
-    src/sockettest.cpp
+    src/servertest.cpp
 
 INCLUDEPATH += \
     headers/ include \

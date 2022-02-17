@@ -1,5 +1,5 @@
-#ifndef SOCKETTEST_H
-#define SOCKETTEST_H
+#ifndef SERVERTEST_H
+#define SERVERTEST_H
 
 #include <QObject>
 #include <QTcpSocket>
@@ -16,31 +16,47 @@ class ServerTest : public QTcpServer
 {   Q_OBJECT
 
     public:
+        //      Constructor & Destructor
         explicit ServerTest();
         ~ServerTest();
-        struct Request;
-        void onConnect(), receiveMessage();
 
-    signals:
-        void requestPending(Request req);
+        //      Public Data Structure
+        //      <IP:ID:request>
+        struct Request;
+
+// Working on signals
+//    signals:
+//        void requestPending(Request req);
 
     public slots:
-        void tcpReady();
+        //      Handling incoming connections
+        //      if error            -> tcpError()
+        //      if incoming message -> receiveMessage()
+        void onConnect();
+
+        //      WORK IN PROGRESS
+        void receiveMessage();
+
+        //      Handles socket errors :
+        //      displaying error received
         void tcpError(QAbstractSocket::SocketError error);
-        bool start_listen(int port_no = 80);
 
     private:
-//        QString GET(QString url);
+        //      Queue containing Requests to be handled
         QQueue<Request> requestQueue;
 
+        //      runs 1# in TODO:receiveMessage
+        //      message format <ClientIP:ClientID:Request>
         Request messageToRequest(QString header);
 
+        //      Private Data struct
         QTcpSocket* socket = new QTcpSocket(this);
         QNetworkAccessManager manager;
         QNetworkReply *response;
         QEventLoop event;
         QHash<QTcpSocket*, QByteArray*> buffers;
 
+        //      TEST DATA STRUCT
         QString requestDirectives[2] = {"g","h"};
 };
 

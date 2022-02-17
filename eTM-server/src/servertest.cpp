@@ -19,6 +19,7 @@ struct ServerTest::Request
         // implement directives TODO:resquestDirectives
         //      ***
 
+    // Constructor
 ServerTest::ServerTest() : QTcpServer()
     {qDebug() << "Starting server" ;
         // Listen to request on localhost:80
@@ -27,18 +28,18 @@ ServerTest::ServerTest() : QTcpServer()
      if( !this->isListening() ) qDebug() << this->errorString();
         // Handles connection -> onConnect()
      connect( this,   &QTcpServer::newConnection,
-             this,   &ServerTest::onConnect);
-    }
+             this,   &ServerTest::onConnect);}
 
-// Destructor
+    // Destructor
 ServerTest::~ServerTest()
-    {socket->disconnectFromHost();
+    {this->disconnect();
+    socket->disconnectFromHost();
     socket->waitForDisconnected();}
 
 
 
-// runs 1# in TODO:receiveMessage
-// message format <ClientIP:ClientID:Request>
+    // runs 1# in TODO:receiveMessage
+    // message format <ClientIP:ClientID:Request>
 ServerTest::Request ServerTest::messageToRequest(QString message)
     {Request req;
      std::string temp = message.toStdString();
@@ -53,14 +54,18 @@ ServerTest::Request ServerTest::messageToRequest(QString message)
               if(!IDflag)   IDflag = true;}}
      return req;}
 
-//      Handles socket errors :
-//      displaying error received
+
+
+    //      Handles socket errors :
+    //      displaying error received
 void ServerTest::tcpError(QTcpSocket::SocketError error)
     { qDebug() << error ; }
 
 
-//      Handling incoming connection
-//      Connecting
+
+    //      Handling incoming connections
+    //      if error            -> tcpError()
+    //      if incoming message -> receiveMessage()
 void ServerTest::onConnect()
     {qDebug() << "CONNECTION" ;
     while (this->hasPendingConnections())
@@ -81,13 +86,16 @@ void ServerTest::onConnect()
         //         buffers.insert(socket, buffer);
     }}
 
-// Not Finished
+
+//          WORK IN PROGRESS
+//
 void ServerTest::receiveMessage()
     {
     requestQueue.enqueue(messageToRequest(socket->readAll()));
-//    emit requestPending(messageToRequest(socket->readAll()));
+    // emit requestPending(messageToRequest(socket->readAll()));
     }
 // use threads
+
 
 ////////////////////////////////////////////////////////
 
