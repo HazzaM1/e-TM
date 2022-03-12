@@ -1,1 +1,8 @@
 Write your name please
+
+Charlotte
+
+Tasks
+
+- Create manager class(Not completed)
+- Create request object(Not completed)
