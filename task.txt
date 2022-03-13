@@ -1,9 +1,9 @@
 Comitted members:
 Charlotte Sams
-
+matt 
 Tasks: 
 
 <Member : Task : Deadline : Status>
-
+<matt: dbs class : by next meeting> not started yet> 
 # invalid task format : please conform - Create manager class(Not completed)
 # invalid task format : please conform - Create request object(Not completed)
