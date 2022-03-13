@@ -57,7 +57,9 @@ class ServerTest : public QTcpServer
         QHash<QTcpSocket*, QByteArray*> buffers;
 
         //      TEST DATA STRUCT
-        QString requestDirectives[2] = {"g","h"};
+        QString requestDirectives[2] = {"NEW ACCOUNT", "function"};
+
+        QString getClientIP(QString header);
 };
 
 #endif

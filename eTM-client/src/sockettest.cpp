@@ -1,23 +1,25 @@
 #include "sockettest.h"
 
-        //      Constructor
+    //      Constructor
 SocketTest::SocketTest()
     {   //  Fetch server address - IMPORTANT
     connect_url =  GET(placeholder_url);
+    Connect();
         //  error handling
     // connect( socket, &QTcpSocket::errorOccurred ,
     //          this,   &SocketTest::tcpError);
      connect( socket, &QTcpSocket::readyRead,
               this,   &SocketTest::tcpReady);}
 
-        //      Destructor
+
+    //      Destructor
 SocketTest::~SocketTest()
     {socket->disconnectFromHost();
     socket->waitForDisconnected();}
 
 
 
-        //      Test connection to server
+    //      Test connection to server
 void SocketTest::Connect()
     {   //  Connect to LocalHost for TEST
     socket->connectToHost(QHostAddress::LocalHost , 80);
@@ -26,7 +28,8 @@ void SocketTest::Connect()
     if(socket->waitForConnected(6000))
         {qDebug() << "Connected!";
             //  Sending client IP
-        socket->write( socket->localAddress().toString().toUtf8() + ":" ); // + userID
+        socket->write( "Matt is great!" ); // + userID
+//        socket->write( socket->localAddress().toString().toUtf8() + ": Hi ! " ); // + userID
         socket->waitForBytesWritten(1000);}
     else
         qDebug() << "Not connected!";}
@@ -49,8 +52,8 @@ QString SocketTest::GET(QString url)
 
 
 
-// Perform a DATABASE test operation
-// through an HTTP GET request
+    //      Perform a DATABASE test operation
+    //      through an HTTP GET request
 //QString ServerTest::ReadDB(QString args)
 //    {return GET("https://" + connect_url + "/DBtest.php?arg=" + args) ;}
 //

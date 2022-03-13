@@ -2,7 +2,7 @@
 #include <QIODevice>
 #include <iostream>
 
-// Data Struct Definition
+//      Data Struct Definition
 struct ServerTest::Request
     {QString clientIP = {};
     QString clientID = {};
@@ -19,7 +19,7 @@ struct ServerTest::Request
         // implement directives TODO:resquestDirectives
         //      ***
 
-    // Constructor
+    //      Constructor
 ServerTest::ServerTest() : QTcpServer()
     {qDebug() << "Starting server" ;
         // Listen to request on localhost:80
@@ -27,10 +27,10 @@ ServerTest::ServerTest() : QTcpServer()
         // If error while listening, display error message
      if( !this->isListening() ) qDebug() << this->errorString();
         // Handles connection -> onConnect()
-     connect( this,   &QTcpServer::newConnection,
+     connect(this,   &QTcpServer::newConnection,
              this,   &ServerTest::onConnect);}
 
-    // Destructor
+    //      Destructor
 ServerTest::~ServerTest()
     {this->disconnect();
     socket->disconnectFromHost();
@@ -38,21 +38,21 @@ ServerTest::~ServerTest()
 
 
 
-    // runs 1# in TODO:receiveMessage
-    // message format <ClientIP:ClientID:Request>
-ServerTest::Request ServerTest::messageToRequest(QString message)
-    {Request req;
-     std::string temp = message.toStdString();
-     bool IPflag(false), IDflag(false);
-     for(auto &c : temp)
-        {if(isalnum(c) || c == '.' || c == ':')
-            {if(!IPflag)    req.clientIP.append(c);
-             if(!IDflag)    req.clientID.append(c);
-             else           req.request.append(c);}
-         if(c == ':')
-             {if(!IPflag)   IPflag = true;
-              if(!IDflag)   IDflag = true;}}
-     return req;}
+    //       runs 1# in TODO:receiveMessage
+    //      message format <ClientIP:ClientID:Request>
+//ServerTest::Request ServerTest::messageToRequest(QString message)
+//    {Request req;
+//     std::string temp = message.toStdString();
+//     bool IPflag(false), IDflag(false);
+//     for(auto &c : temp)
+//        {if(isalnum(c) || c == '.' || c == ':')
+//            {if(!IPflag)    req.clientIP.append(c);
+//             if(!IDflag)    req.clientID.append(c);
+//             else           req.request.append(c);}
+//         if(c == ':')
+//             {if(!IPflag)   IPflag = true;
+//              if(!IDflag)   IDflag = true;}}
+//     return req;}
 
 
 
@@ -90,8 +90,10 @@ void ServerTest::onConnect()
 //          WORK IN PROGRESS
 //
 void ServerTest::receiveMessage()
-    {
-    requestQueue.enqueue(messageToRequest(socket->readAll()));
+    {socket->waitForBytesWritten();
+        std::cout << socket->readAll().toStdString() << std::endl;
+//    getClientIP(QString::fromStdString(socket->readAll().toStdString()));
+//    requestQueue.enqueue(messageToRequest(socket->readAll()));
     // emit requestPending(messageToRequest(socket->readAll()));
     }
 // use threads
@@ -125,18 +127,18 @@ void ServerTest::receiveMessage()
 //
 
     // Parse GET request and extracts client IP
-//QString ServerTest::getClientIP(QString header)
-//    {QString res = {};
-//     std::string temp = header.toStdString();
-//     int i = temp.find("Forwarded")+9;
-//     bool flag(false);
-//     while(true)
-//        {if((isalnum(temp[i]) || temp[i] == '.' || temp[i] == ':') && flag)     res.append(temp[i]);
-//         if(temp[i] == ':')                                                     flag = true;
-//         if(temp[i] == ',' || temp[i] == '\r')                                  break;
-//         i++;}
-//      return res;}
-//
+QString ServerTest::getClientIP(QString header)
+    {QString res = {};
+     std::string temp = header.toStdString();
+     int i = temp.find("Forwarded")+9;
+     bool flag(false);
+     while(true)
+        {if((isalnum(temp[i]) || temp[i] == '.' || temp[i] == ':') && flag)     res.append(temp[i]);
+         if(temp[i] == ':')                                                     flag = true;
+         if(temp[i] == ',' || temp[i] == '\r')                                  break;
+         i++;}
+      return res;}
+
 
     // From tcpReady()
 //  In the case of receiving a GET HTTP request
