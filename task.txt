@@ -1,8 +1,9 @@
-Write your name please
+Comitted members:
+Charlotte Sams
 
-Charlotte
+Tasks: 
 
-Tasks
+<Member : Task : Deadline : Status>
 
-- Create manager class(Not completed)
-- Create request object(Not completed)
+# invalid task format : please conform - Create manager class(Not completed)
+# invalid task format : please conform - Create request object(Not completed)
