@@ -1,12 +1,24 @@
 QT += \
-    network
+    network \
+    widgets
 
 HEADERS += \
-    include/sockettest.h
+    include/client.h \
+    include/signInPage.h \
+    include/signUpPage.h \
+    include/sockettest.h \
+    include/welcomePage.h \
+    include/process.h \
+    include/manager.h
 
 SOURCES += \
+    src/client.cpp \
+    src/manager.cpp \
+    src/signInPage.cpp \
     src/main.cpp \
-    src/sockettest.cpp
+    src/signUpPage.cpp \
+    src/sockettest.cpp \
+    src/welcomePage.cpp
 
 INCLUDEPATH += \
     headers/ include \
