@@ -13,7 +13,7 @@ class welcomePage : public QWidget
     Q_OBJECT
 
     public:
-        welcomePage(QWidget *widget);
+        welcomePage(QObject *object);
         void passProcess();
 
         signInPage *signIn = new signInPage(this);

@@ -2,6 +2,7 @@
 #define PROCESS_H
 
 #include <string>
+// KEEP IT STD::STRING, QSTRING CAUSES ERROR
 
 const int processCodeMaxChar = 3;
 

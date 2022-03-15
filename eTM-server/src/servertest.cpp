@@ -1,6 +1,7 @@
 #include "servertest.h"
 #include <QIODevice>
 #include <iostream>
+#include <string>
 
 // Data Struct Definition
 struct ServerTest::Request
@@ -25,7 +26,7 @@ ServerTest::ServerTest() : QTcpServer()
         // Listen to request on localhost:80
      this->listen(QHostAddress::LocalHost ,80);
         // If error while listening, display error message
-     if( !this->isListening() ) qDebug() << this->errorString();
+     if( !this->isListening() ) qDebug() << "error : " <<this->errorString();
         // Handles connection -> onConnect()
      connect( this,   &QTcpServer::newConnection,
              this,   &ServerTest::onConnect);}
@@ -58,7 +59,7 @@ ServerTest::Request ServerTest::messageToRequest(QString message)
 
     //      Handles socket errors :
     //      displaying error received
-void ServerTest::tcpError(QTcpSocket::SocketError error)
+void ServerTest::tcpError(QSslSocket::SocketError error)
     { qDebug() << error ; }
 
 
@@ -73,11 +74,13 @@ void ServerTest::onConnect()
             //  Because of ngrok tunneling
             //  Cannot access client IP trhough socket
         //         qDebug() << socket->peerAddress();
+        socket->write("are you connected?");
+        socket->waitForBytesWritten(2000);
             // Error Handler -> tcpError()
-         connect( socket, &QTcpSocket::errorOccurred,
+         connect( socket, &QSslSocket::errorOccurred,
                   this,   &ServerTest::tcpError);
             // Incoming message ready to be handled -> receiveMessage()
-         connect( socket, &QTcpSocket::readyRead,
+         connect( socket, &QSslSocket::readyRead,
                   this,   &ServerTest::receiveMessage);
             // Keep connection alive
          socket->setSocketOption(QAbstractSocket::KeepAliveOption, true );
@@ -90,8 +93,11 @@ void ServerTest::onConnect()
 //          WORK IN PROGRESS
 //
 void ServerTest::receiveMessage()
-    {
-    requestQueue.enqueue(messageToRequest(socket->readAll()));
+    {qDebug() << socket->readAll();
+//     socket->connectToHost("192.168.0.15", 56344);
+      socket->write("Message Received thx");
+      socket->waitForBytesWritten(2000);
+//    requestQueue.enqueue(messageToRequest(socket->readAll()));
     // emit requestPending(messageToRequest(socket->readAll()));
     }
 // use threads

@@ -6,8 +6,10 @@
 #include <process.h>
 #include <welcomePage.h>
 #include <manager.h>
+#include <sockettest.h>
 
-class client : public QWidget
+
+class client : public QObject
 {
     Q_OBJECT
 
@@ -17,12 +19,12 @@ class client : public QWidget
     private:
         int width;
         int height;
-        bool queueFlag;
         QQueue<Process> processQueue;
         QThread processorThread;
 
-        manager *processManager = new manager(this, &processQueue, &queueFlag);
+        manager *processManager = new manager(this, &processQueue);
         welcomePage *welcome = new welcomePage(this);
+
         void initGUI();
 
     signals:

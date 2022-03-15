@@ -7,6 +7,9 @@
 #include <QThread>
 #include <QQueue>
 
+#include <vector>
+
+#include <sockettest.h>
 
 //#include <process.h>
 
@@ -15,12 +18,18 @@ class manager : public QObject
     Q_OBJECT
 
     public:
-        manager(QWidget *widget, QQueue<Process> *pQueue, bool *flag);
+        manager(QObject *object, QQueue<Process> *pQueue);
+        bool getQueueFlag();
+        SocketTest *socket = new SocketTest;
 
     private:
-        QWidget *parent;
-        bool *queueFlag;
+            template <class T>
+            using Directive = bool(T::*)(QString);
+        std::vector<Directive<SocketTest>> socketDirectives;
+
+        QObject *parent;
         QQueue<Process> *processQueue;
+        bool queueFlag;
 
     signals:
         void pQueueEmpty();
@@ -29,5 +38,4 @@ class manager : public QObject
         void treatProcess();
 
 };
-
 #endif // MANAGER_H

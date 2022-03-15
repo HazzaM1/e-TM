@@ -5,29 +5,33 @@ SocketTest::SocketTest()
     {   //  Fetch server address - IMPORTANT
     connect_url =  GET(placeholder_url);
         //  error handling
-    // connect( socket, &QTcpSocket::errorOccurred ,
+    // connect( this, &QTcpSocket::errorOccurred ,
     //          this,   &SocketTest::tcpError);
-     connect( socket, &QTcpSocket::readyRead,
-              this,   &SocketTest::tcpReady);}
+     connect( this, &QSslSocket::readyRead,
+              this, &SocketTest::tcpReady);}
 
-        //      Destructor
-SocketTest::~SocketTest()
-    {socket->disconnectFromHost();
-    socket->waitForDisconnected();}
+//        //      Destructor
+//SocketTest::~SocketTest()
+//    {this->disconnectFromHost();
+//    this->waitForDisconnected();}
 
 
 
         //      Test connection to server
 void SocketTest::Connect()
     {   //  Connect to LocalHost for TEST
-    socket->connectToHost(QHostAddress::LocalHost , 80);
+    this->connectToHost(QHostAddress::LocalHost , 80);
+//    this->connectToHost("6.tcp.ngrok.io" , 12730);
+//    this->write(this->localAddress().toString().toUtf8()+ ":" + QString::number(this->localPort()).toUtf8());
         //  Will connect remote server
-    //  socket->connectToHost(connect_url, 80);
-    if(socket->waitForConnected(6000))
+    //  this->connectToHost(connect_url, 80);
+    if(this->waitForConnected(6000))
         {qDebug() << "Connected!";
             //  Sending client IP
-        socket->write( socket->localAddress().toString().toUtf8() + ":" ); // + userID
-        socket->waitForBytesWritten(1000);}
+//        this->write( this->localAddress().toString().toUtf8() + ":" ); // + userID
+//        this->waitForBytesWritten(1000);
+        this->setSocketOption(QAbstractSocket::KeepAliveOption, true );
+        }
     else
         qDebug() << "Not connected!";}
 
@@ -35,7 +39,8 @@ void SocketTest::Connect()
 
     //      Reads incoming message from server
 void SocketTest::tcpReady()
-    {auto message = socket->readAll();
+    {this->waitForBytesWritten(2000);
+    auto message = this->readAll();
      qDebug() << message;}
 
 
@@ -48,6 +53,14 @@ QString SocketTest::GET(QString url)
     return response->readAll();}
 
 
+bool SocketTest::sendRequest(QString string)
+    {if (this->waitForConnected(2000))
+        {this->write(this->localAddress().toString().toUtf8()+ ":" + QString::number(this->localPort()).toUtf8() + " : " + string.toUtf8()); // + userID
+         this->waitForBytesWritten(2000);
+         qDebug() << "Message Sent";
+         return true;}
+    qDebug() << "Message Not Sent";
+    return false;}
 
 // Perform a DATABASE test operation
 // through an HTTP GET request

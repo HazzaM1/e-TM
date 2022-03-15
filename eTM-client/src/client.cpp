@@ -1,24 +1,23 @@
 #include "client.h"
 
 client::client(QSize size)
-{
-    width = size.width();
+    {width = size.width();
     height = size.height();
-
+    // THREAD MANAGEMENT
     processManager->moveToThread(&processorThread);
-    queueFlag = false;
-
+    processManager->socket->moveToThread(&processorThread);
+    // GUI MANAGEMENT
 //    initGUI();
-    connect(welcome->signIn, &signInPage::signInAttempt, this, &client::queueProcess);
-    connect(this, &client::pQueuePending, processManager, &manager::treatProcess);
-    this->show();
+    //  CONNECTION MANAGEMENT
+        //  PROCESS MANAGEMENT
+        connect(welcome->signIn, &signInPage::signInAttempt, this, &client::queueProcess);
+        connect(this, &client::pQueuePending, processManager, &manager::treatProcess);
 }
 
 void client::queueProcess(Process process)
     {processQueue.enqueue(process);
-     if (!queueFlag)
-        {queueFlag = true;
-         processorThread.start();
+     if (!processManager->getQueueFlag())
+        {processorThread.start();
          emit pQueuePending();}}
 
 //void client::initGUI()

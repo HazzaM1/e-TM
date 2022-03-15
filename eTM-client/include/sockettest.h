@@ -2,7 +2,7 @@
 #define SOCKETTEST_H
 
 #include <QObject>
-#include <QTcpSocket>
+#include <QSslSocket>
 #include <QDebug>
 #include <QUrl>
 #include <QtNetwork/QNetworkAccessManager>
@@ -10,24 +10,19 @@
 #include <QtNetwork/QNetworkReply>
 #include <QEventLoop>
 
-class SocketTest : public QObject
+class SocketTest : public QSslSocket
 {   Q_OBJECT
 
     public:
-        // Constructor & Destructor
-        explicit SocketTest();
-        ~SocketTest();
-
-        // TEST FUNCTION
-        //      Perform a DATABASE test operation
-        //      through an HTTP GET request
-        QString ReadDB(QString args);
-
-        //      Test connection to server
+        SocketTest();
+//        ~SocketTest();
         void Connect();
+        bool sendRequest(QString string);
 
-//    signals:
-//    public slots:
+//        // TEST FUNCTION
+//        //      Perform a DATABASE test operation
+//        //      through an HTTP GET request
+//        QString ReadDB(QString args);
 
     private:
         //      Reads incoming message from server
@@ -40,7 +35,6 @@ class SocketTest : public QObject
         QString GET(QString url), connect_url;
 
         //      Private Data struct
-        QTcpSocket* socket = new QTcpSocket(this);
         QNetworkAccessManager manager;
         QNetworkReply *response;
         QEventLoop event;

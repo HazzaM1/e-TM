@@ -2,13 +2,11 @@
 #define SERVERTEST_H
 
 #include <QObject>
-#include <QTcpSocket>
 #include <QDebug>
-#include <QUrl>
-#include <QHostAddress>
 #include <QtNetwork>
 #include <QEventLoop>
 #include <QQueue>
+
 #include <string>
 
 
@@ -50,7 +48,7 @@ class ServerTest : public QTcpServer
         Request messageToRequest(QString header);
 
         //      Private Data struct
-        QTcpSocket* socket = new QTcpSocket(this);
+        QTcpSocket* socket = new QSslSocket(this);
         QNetworkAccessManager manager;
         QNetworkReply *response;
         QEventLoop event;

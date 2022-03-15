@@ -2,6 +2,8 @@
 # ----------------------------------------------------------------------------
 eTM-client/build-dir/*
 eTM-client/bin/*
+build-eTM-client-Desktop_Qt_6_2_3_MinGW_64_bit-Debug/*
+build-eTM-server-Desktop_Qt_6_2_3_MinGW_64_bit-Debug/*
 *~
 *.autosave
 *.a
