@@ -8,7 +8,14 @@
 const int processCodeMaxChar = 3;
 
 struct Process
-    {char processCode[processCodeMaxChar] = {'0','0','0'};
+    {int appID;
+     int clientID;
+     char processCode[processCodeMaxChar] = {'0','0','0'};
      std::vector<std::string> processParam  = {};};
+
+struct clientDetails
+    {int appID = 0;
+     int clientID = 0;
+     std::string channelID;};
 
 #endif // PROCESS_H

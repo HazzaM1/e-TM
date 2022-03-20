@@ -1,23 +1,22 @@
-#ifndef CLIENT_H
-#define CLIENT_H
+#ifndef SERVER_H
+#define SERVER_H
 
 #include <QThread>
 
 #include <QObject>
 
 #include <manager.h>
+#include <dbmanager.h>
 
-class client : public QObject
-{
-    Q_OBJECT
+class server : public QObject
+{   Q_OBJECT
 
     public:
-        client(int w, int h);
+        server();
 
     private:
-        int width;
-        int height;
         QThread processorThread;
+        QThread DBThread;
         manager *processManager;
 
         QQueue<Process> processQueue;
@@ -30,4 +29,4 @@ class client : public QObject
 
 };
 
-#endif // CLIENT_H
+#endif // SERVER_H

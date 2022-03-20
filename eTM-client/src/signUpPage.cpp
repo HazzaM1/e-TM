@@ -1,12 +1,16 @@
 #include "signUpPage.h"
 
-signUpPage::signUpPage(QWidget *widget)
-    {this->setParent(widget);
-     this->setLayout(layout);
-     layout->setAlignment(Qt::AlignHCenter);
+signUpPage::signUpPage(QWidget *widget, QSize size)
+    {layout->setAlignment(Qt::AlignHCenter);
      layout->addWidget(driverButton);
      layout->addWidget(cargoOwnerButton);
      layout->addWidget(companyButton);
      layout->addWidget(switchButton);
+     driverButton->setFixedSize(size.width()/2, size.height()/10);
+     cargoOwnerButton->setFixedSize(size.width()/2, size.height()/10);
+     companyButton->setFixedSize(size.width()/2, size.height()/10);
+     switchButton->setFixedSize(size.width()/2, size.height()/10);
+     this->setParent(widget);
+     this->setLayout(layout);
      this->adjustSize();
-     this->move(this->parentWidget()->width()/2-this->width(), this->parentWidget()->height()/2-this->height()/2);}
+     this->move(size.width()/2-this->width()/2, size.height()/2-this->height()/4);}

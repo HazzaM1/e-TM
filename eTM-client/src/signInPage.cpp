@@ -1,26 +1,42 @@
 #include "signInPage.h"
 
-signInPage::signInPage(QWidget *widget)
-    {Parent = widget;
-    initGUI();
-    connect(submitButton, &QPushButton::clicked , this, &signInPage::submitSignIn);}
+signInPage::signInPage(QWidget *widget, QSize size)
+    {wWidth = size.width();
+     wHeight = size.height();
+     this->setParent(widget);
+     initGUI();
+     connect(submitButton, &QPushButton::clicked , this, &signInPage::submitSignIn);}
 
 void signInPage::initGUI()
-    {this->setParent(Parent);
-     this->setLayout(layout);
-     passwordTextBox->setEchoMode(QLineEdit::Password);
-     layout->addWidget(emailLabel);
+    {layout->addSpacing(20);
      layout->addWidget(emailTextBox);
-     layout->addWidget(passwordLabel);
+     layout->addSpacing(10);
      layout->addWidget(passwordTextBox);
-     layout->addWidget(submitButton);
-     layout->addWidget(switchButton);
+     layout->addSpacing(5);
+     layout->addWidget(submitButton, 100, Qt::AlignHCenter);
+     layout->addSpacing(70);
+     layout->addWidget(switchButton, 100, Qt::AlignHCenter);
+     layout->setContentsMargins(0,0,0,0);
+     layout->setAlignment(Qt::AlignHCenter);
+     emailTextBox->setFixedSize(wWidth/1.5,wHeight/10);
+     emailTextBox->setAlignment(Qt::AlignHCenter);
+     emailTextBox->setPlaceholderText("Enter your email");
+     passwordTextBox->setFixedSize(wWidth/1.5,wHeight/10);
+     passwordTextBox->setAlignment(Qt::AlignHCenter);
+     passwordTextBox->setPlaceholderText("Enter your password");
+     passwordTextBox->setEchoMode(QLineEdit::Password);
+     submitButton->setFixedSize(wWidth/2.5,wHeight/13);
+     submitButton->setStyleSheet("font-weight: bold;");
+     switchButton->setFixedSize(wWidth/2.5,wHeight/13);
+     switchButton->setStyleSheet("font-weight: bold;");
+     this->setLayout(layout);
+     this->setFocus();
+     this->setStyleSheet("QLineEdit { border-radius: 7px; }");
      this->adjustSize();
-     this->move(Parent->width()/2-this->width(), Parent->height()/2-this->height()/2);}
+     this->setGeometry(wWidth/2-this->width()/2, wHeight/2-this->height()/3, this->width(), this->height());}
 
 void signInPage::submitSignIn()
-    {if (emailRegex->match(emailTextBox->text()).hasMatch()) emit signInAttempt({{'1','1','1'},emailTextBox->text().toStdString()+","+passwordTextBox->text().toStdString()});
+    {Process process = {{'8','0','0'}, {"000", emailTextBox->text().toStdString(), passwordTextBox->text().toStdString()}};
+    if (emailRegex->match(emailTextBox->text()).hasMatch())
+        emit signInAttempt(process);
     else qDebug() << "Email no good!";}
-
-bool signInPage::validateData()
-    {return emailRegex->match(emailTextBox->text()).isValid();}

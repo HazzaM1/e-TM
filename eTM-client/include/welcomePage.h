@@ -5,23 +5,38 @@
 #include <QWidget>
 #include <QPushButton>
 
-#include "signInPage.h"
-#include "signUpPage.h"
+#include <signInPage.h>
+#include <signUpPage.h>
+#include <navigationtab.h>
+
+#include <QPropertyAnimation>
+#include <QGraphicsOpacityEffect>
+#include <QParallelAnimationGroup>
+#include <QSequentialAnimationGroup>
 
 class welcomePage : public QWidget
 {
     Q_OBJECT
 
-    public:
-        welcomePage(QObject *object);
-        void passProcess();
+    private:
+        const int wWidth = 300;
+        const int wHeight = 400;
+        int rWidth;
+        int rHeight;
+        QLabel *div = new QLabel(this);
+        QLabel *logo_label = new QLabel(this);
 
-        signInPage *signIn = new signInPage(this);
-        signUpPage *signUp = new signUpPage(this);
+    public:
+        welcomePage(int w, int h);
+        signInPage *signIn = new signInPage(this, QSize(wWidth, wHeight));
+        signUpPage *signUp = new signUpPage(this, QSize(wWidth, wHeight));
+        navigationTab *navTab;
         bool switchFlag = false;
 
     public slots:
         void switchTab();
+        void signInFailed();
+        void signInSuccess();
 };
 
 #endif // WELCOMEPAGE_H

@@ -1,12 +1,10 @@
-#include <QCoreApplication>
-#include "servertest.h"
+#include <QApplication>
+
+#include <server.h>
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
-
-    ServerTest cTest;
-//    qDebug() << cTest.ReadDB("drivers");
-
+    QApplication a(argc, argv);
+    server *myWin = new server;
     return a.exec();
 }

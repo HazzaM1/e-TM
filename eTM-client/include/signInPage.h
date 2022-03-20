@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QLineEdit>
+#include <QGroupBox>
 #include <QVBoxLayout>
 #include <QRegularExpression>
 
@@ -16,22 +17,20 @@ class signInPage : public QWidget
     Q_OBJECT
 
     public:
-        signInPage(QWidget *widget);
-        QPushButton *switchButton = new QPushButton("Sign Up");
-
-    private:
-        QWidget *Parent;
+        signInPage(QWidget *widget, QSize size);
         QVBoxLayout *layout = new QVBoxLayout;
         QLineEdit *emailTextBox = new QLineEdit();
         QLineEdit *passwordTextBox = new QLineEdit();
-        QLabel *emailLabel = new QLabel("Email");
-        QLabel *passwordLabel = new QLabel("Password");
-        QPushButton *submitButton = new QPushButton("Submit");
+        QPushButton *submitButton = new QPushButton("Sign In");
+        QPushButton *switchButton = new QPushButton("Sign Up");
 
-        QRegularExpression *emailRegex = new QRegularExpression("([a-zA-Z0-9.-])*@(([a-zA-Z0-9])*\\.){1,}([a-z]){1,}");
+    private:
+        int wWidth;
+        int wHeight;
+
+        QRegularExpression *emailRegex = new QRegularExpression("([a-zA-Z0-9.-]){1,}@(([a-zA-Z0-9])*\\.){1,}([a-z]){1,}");
 
         void initGUI();
-        bool validateData();
 
     private slots:
         void submitSignIn();

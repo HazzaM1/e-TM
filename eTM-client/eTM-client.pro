@@ -1,23 +1,30 @@
 QT += \
     network \
-    widgets
+    widgets \
+    mqtt
 
 HEADERS += \
-    include/client.h \
+    include/mqttClient.h \
     include/signInPage.h \
     include/signUpPage.h \
-    include/sockettest.h \
     include/welcomePage.h \
     include/process.h \
-    include/manager.h
+    include/manager.h \
+    include/client.h \
+    include/navigationtab.h \
+    include/listtab.h \
+    include/signupform.h
 
 SOURCES += \
+    src/signupform.cpp \
+    src/listtab.cpp \
+    src/navigationtab.cpp \
     src/client.cpp \
     src/manager.cpp \
+    src/mqttClient.cpp \
     src/signInPage.cpp \
     src/main.cpp \
     src/signUpPage.cpp \
-    src/sockettest.cpp \
     src/welcomePage.cpp
 
 INCLUDEPATH += \

@@ -1,26 +1,22 @@
 #include "client.h"
 
-client::client(QSize size)
-    {width = size.width();
-    height = size.height();
-    // THREAD MANAGEMENT
-    processManager->moveToThread(&processorThread);
-    processManager->socket->moveToThread(&processorThread);
-    // GUI MANAGEMENT
-//    initGUI();
-    //  CONNECTION MANAGEMENT
-        //  PROCESS MANAGEMENT
-        connect(welcome->signIn, &signInPage::signInAttempt, this, &client::queueProcess);
-        connect(this, &client::pQueuePending, processManager, &manager::treatProcess);
-}
+client::client(int w, int h)
+    {width = w;
+     height = h;
+     processManager = new manager(w, h, &processQueue);
+     processManager->moveToThread(&processorThread);
+     processManager->mqtt->moveToThread(&processorThread);
+     processorThread.start();
+     // CONNECTIONS
+     connect(&processorThread, &QThread::started, processManager->mqtt, &mqttClient::init);
+     connect(processManager->welcome->signIn, &signInPage::signInAttempt, this, &client::queueProcess);
+     connect(processManager->mqtt, &mqttClient::incomingProcess, this, &client::queueProcess);
+     connect(this, &client::pQueuePending, processManager, &manager::treatProcess);
+     connect(processManager, &manager::signInFail, processManager->welcome, &welcomePage::signInFailed);
+     connect(processManager, &manager::signInSuccess, processManager->welcome, &welcomePage::signInSuccess);}
 
 void client::queueProcess(Process process)
-    {processQueue.enqueue(process);
-     if (!processManager->getQueueFlag())
-        {processorThread.start();
-         emit pQueuePending();}}
+  {processQueue.enqueue(process);
+   if (!processManager->queueFlag)
+      emit pQueuePending();}
 
-//void client::initGUI()
-//    {this->setWindowFlags(Qt::FramelessWindowHint);
-//     this->setAttribute(Qt::WA_TranslucentBackground);
-//     this->setGeometry(0, 0, width, height-1);}

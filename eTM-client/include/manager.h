@@ -3,13 +3,11 @@
 
 #include <QObject>
 #include <QWidget>
-
-#include <QThread>
 #include <QQueue>
-
 #include <vector>
 
-#include <sockettest.h>
+#include <mqttClient.h>
+#include <welcomePage.h>
 
 //#include <process.h>
 
@@ -17,25 +15,46 @@ class manager : public QObject
 {
     Q_OBJECT
 
-    public:
-        manager(QObject *object, QQueue<Process> *pQueue);
-        bool getQueueFlag();
-        SocketTest *socket = new SocketTest;
+private:
+        int width;
+        int height;
 
-    private:
-            template <class T>
-            using Directive = bool(T::*)(QString);
-        std::vector<Directive<SocketTest>> socketDirectives;
+        int appID = 0;
+        int clientID = 0;
+        QString QappID = QString::fromStdString(std::to_string(appID));
 
-        QObject *parent;
+        template <class T>
+            using vectorDirective = bool(T::*)(std::vector<std::string>);
+        template <class T>
+            using stringDirective = bool(T::*)(std::string);
+        template <class T>
+            using intDirective = void(T::*)(int);
+        std::vector<std::vector<vectorDirective<mqttClient>>> mqttDirectives;
+        std::vector<std::vector<intDirective<manager>>> managerDirectives;
+
         QQueue<Process> *processQueue;
-        bool queueFlag;
+
+    public:
+        manager(int w, int h, QQueue<Process> *pQueue);
+
+        bool queueFlag = false;
+
+        // ---------
+        mqttClient *mqtt = new mqttClient(&appID, &clientID);
+        welcomePage *welcome;
+
+        // ---------
 
     signals:
         void pQueueEmpty();
+        void signInFail();
+        void signInSuccess();
 
     public slots:
         void treatProcess();
+        void setAppID(int aID);
+        void authValidated(int cID);
+        void authFailed(int empty);
 
 };
 #endif // MANAGER_H

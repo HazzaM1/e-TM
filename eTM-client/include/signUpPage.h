@@ -12,11 +12,13 @@ class signUpPage : public QWidget
     Q_OBJECT
 
     public:
-        signUpPage(QWidget *widget);
+        signUpPage(QWidget *widget, QSize size);
         QPushButton *switchButton = new QPushButton("Sign In");
 
     private:
-        QWidget *Parent;
+        int welcomePageWidth;
+        int welcomePageHeight;
+
         QGridLayout *layout = new QGridLayout;
         QPushButton *driverButton = new QPushButton("Driver");
         QPushButton *cargoOwnerButton = new QPushButton("Cargo Owner");

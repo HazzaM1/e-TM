@@ -1,16 +1,11 @@
 #include "manager.h"
 #include <QDebug> //
 
-manager::manager(int w, int h, QQueue<Process> *pQueue)
+manager::manager(QQueue<Process> *pQueue)
     {// DATA //
-     width = w;
-     height = h;
-     welcome = new welcomePage(w, h);
      processQueue = pQueue;
-     mqttDirectives = {{&mqttClient::sendRequest}, {}};
-     managerDirectives = {{&manager::setAppID, &manager::authValidated},
-                          {&manager::authFailed}};}
-
+     mqttDirectives = {{&mqttServer::sendRequest}};
+     dbDirectives = {{&DBmanager::authQuery}};}
 
 void manager::treatProcess()
     {queueFlag = true;
@@ -19,8 +14,15 @@ void manager::treatProcess()
         int destCode = currentProcess.processCode[0] - 48;
         int extraCode  = currentProcess.processCode[1] - 48;
         int processCode = currentProcess.processCode[2] - 48;
+        int appID = currentProcess.appID;
+        int clientID = currentProcess.clientID; // For Privileges Check
+        QString channelID;
+        for (const clientDetails &client : *clients)
+            {if (client.appID == appID)
+                channelID = QString::fromStdString(client.channelID);}
         switch(destCode)
-                {case 0: /* (signInPage->*signInDirectives[extraCode][processCode])( /// ); */ break;
+                {   // 0 : Database Directives
+                 case 0: (DB->*dbDirectives[extraCode][processCode])(appID, currentProcess.processParam); break;
                  case 1: /* (signUpPage->*signUpPageDirectives[extraCode][processCode])( /// ); */ break;
                  case 2: /* (signUpForm->*signUpFormDirectives[extraCode][processCode])( /// ); */ break;
                  case 3: /* (mainPage->*mainDirectives[extraCode][processCode])( /// ); */ break;
@@ -28,19 +30,8 @@ void manager::treatProcess()
                  case 5: /* (objectPage->*objectDirectives[extraCode][processCode])( /// ); */ break;
                  case 6: /* (signInPage->*signInDirectives[extraCode][processCode])( /// ); */ break;
                  case 7: /* (signInPage->*signInDirectives[extraCode][processCode])( /// ); */ break;
-                    // code 8 : MQTT Directives
-                 case 8: (mqtt->*mqttDirectives[extraCode][processCode])(currentProcess.processParam); break;
-                    // code 9 : Manager Directives
-                 case 9: (this->*managerDirectives[extraCode][processCode])(std::stoi(currentProcess.processParam.at(0))); break;}}
+                 case 8: /* (signInPage->*signInDirectives[extraCode][processCode])( /// ); */ break;
+                    // 9 : MQTT Client Directives
+                 case 9: (mqtt->*mqttDirectives[extraCode][processCode])(channelID, currentProcess.processParam); break;}}
      queueFlag = false;
      emit pQueueEmpty();}
-
-void manager::setAppID(int aID)
-    {appID = aID;}
-
-void manager::authValidated(int cID)
-    {clientID = cID;
-     emit signInSuccess();}
-
-void manager::authFailed(int empty)
-    {emit signInFail();}
