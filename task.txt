@@ -1,0 +1,9 @@
+Comitted members:
+Charlotte Sams
+
+Tasks: 
+
+<Member : Task : Deadline : Status>
+
+# invalid task format : please conform - Create manager class(Not completed)
+# invalid task format : please conform - Create request object(Not completed)
