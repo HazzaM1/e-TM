@@ -47,7 +47,7 @@ private:
 
     signals:
         void pQueueEmpty();
-        void signInFail();
+        void signInFail(QString error);
         void signInSuccess();
 
     public slots:

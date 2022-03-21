@@ -7,9 +7,10 @@ welcomePage::welcomePage(int w, int h)
      div->setGeometry(0,0,wWidth,wHeight*0.3);
      logo_label->setPixmap(QPixmap("../res/img/eTM-icon_1.jpg"));
      logo_label->setScaledContents(true);
-     logo_label->setGeometry((wWidth-wWidth*0.44)/2,(wHeight*0.3-wHeight*0.2)/2, wWidth*0.44, wHeight*0.2);
+     logo_label->setGeometry((wWidth-wWidth*0.46)/2,(wHeight*0.3-wHeight*0.2)/2, wWidth*0.46, wHeight*0.2);
      connect(signIn->switchButton, &QPushButton::clicked, this, &welcomePage::switchTab);
      connect(signUp->switchButton, &QPushButton::clicked, this, &welcomePage::switchTab);
+     connect(signIn, &signInPage::errorMessage, this, &welcomePage::errorMessage);
      switchTab();
      this->setGeometry((w-wWidth)/2,(h-wHeight)/2, wWidth, wHeight);
      this->setStyleSheet("welcomePage {background-color: qlineargradient(x1:0,y1:0.2, x2:0.8,y2:1, stop:0 rgba(0,101,18,1), stop:1 rgba(118,212,44,1) );}");
@@ -21,15 +22,15 @@ void welcomePage::switchTab()
      signUp->setVisible(switchFlag);
      switchFlag = !switchFlag;}
 
-void welcomePage::signInFailed()
-    {qDebug() << "Authentication Failed!";
+void welcomePage::errorMessage(QString error)
+    {qDebug() << error;
      QGraphicsOpacityEffect *opacityEffect = new QGraphicsOpacityEffect();
      QLabel *authLabel = new QLabel(this);
-     authLabel->setText("Authentication failed");
+     authLabel->setText(error);
      authLabel->setAlignment(Qt::AlignCenter);
      authLabel->setStyleSheet("background-color : rgba(255,0,0,0.3); color : rgba(150,0,0,1); font-weight: bold; border: 2px solid rgba(150,0,0,0.6); border-radius: 7px;");
      authLabel->setGraphicsEffect(opacityEffect);
-     authLabel->setGeometry(wWidth/6, wHeight*18.2/25, wWidth*4/6, wHeight/15);
+     authLabel->setGeometry(wWidth/6, wHeight*17.5/25, wWidth*4/6, wHeight/15);
      opacityEffect->setOpacity(0);
      authLabel->show();
      QPropertyAnimation *animy = new QPropertyAnimation(opacityEffect, "opacity");
@@ -62,7 +63,7 @@ void welcomePage::signInSuccess()
      authLabel->setAlignment(Qt::AlignCenter);
      authLabel->setStyleSheet("background-color : rgba(0,145,25,0.3); color: rgba(0,102,17,1); font-weight: bold; border: 2px solid rgba(0,102,17,0.6); border-radius: 7px;");
      authLabel->setGraphicsEffect(opac_authL);
-     authLabel->setGeometry(wWidth/6, wHeight*18.2/25, wWidth*4/6, wHeight/15);
+     authLabel->setGeometry(wWidth/6, wHeight*17.5/25, wWidth*4/6, wHeight/15);
      authLabel->show();
          QPropertyAnimation *animy = new QPropertyAnimation(opac_authL, "opacity");
          animy->setDuration(2000);
@@ -115,3 +116,54 @@ void welcomePage::signInSuccess()
      connect(anima, &QSequentialAnimationGroup::finished, signUp, &QLabel::deleteLater);
      connect(anima, &QSequentialAnimationGroup::finished, [this](){this->setStyleSheet("background-color: white;");});
      connect(anime, &QSequentialAnimationGroup::finished, [this](){this->setWindowState(Qt::WindowMaximized);});}
+
+void welcomePage::signingUp(int formID)
+    {QGraphicsOpacityEffect *opac_driver = new QGraphicsOpacityEffect();
+      opac_driver->setOpacity(1);
+     QGraphicsOpacityEffect *opac_company = new QGraphicsOpacityEffect();
+      opac_company->setOpacity(1);
+     QGraphicsOpacityEffect *opac_cargoOwner = new QGraphicsOpacityEffect();
+      opac_cargoOwner->setOpacity(1);
+     QGraphicsOpacityEffect *opac_signin = new QGraphicsOpacityEffect();
+      opac_signin->setOpacity(1);
+     signUp->driverButton->setGraphicsEffect(opac_driver);
+     signUp->companyButton->setGraphicsEffect(opac_company);
+     signUp->cargoOwnerButton->setGraphicsEffect(opac_cargoOwner);
+     signUp->switchButton->setGraphicsEffect(opac_signin);
+         QPropertyAnimation *animf = new QPropertyAnimation(opac_driver, "opacity");
+         animf->setDuration(150);
+         animf->setEndValue(0);
+         QPropertyAnimation *animg = new QPropertyAnimation(opac_company, "opacity");
+         animg->setDuration(150);
+         animg->setEndValue(0);
+         QPropertyAnimation *animh = new QPropertyAnimation(opac_cargoOwner, "opacity");
+         animh->setDuration(150);
+         animh->setEndValue(0);
+         QPropertyAnimation *animi = new QPropertyAnimation(opac_signin, "opacity");
+         animi->setDuration(150);
+         animi->setEndValue(0);
+             QPropertyAnimation *animb = new QPropertyAnimation(logo_label, "geometry");
+             animb->setDuration(1000);
+             animb->setEndValue(QRect(logo_label->pos().x()+wWidth/4, logo_label->pos().y(), logo_label->width(), logo_label->height()));
+             animb->setEasingCurve(QEasingCurve::InOutQuart);
+             QPropertyAnimation *animk = new QPropertyAnimation(this, "geometry");
+             animk->setDuration(1000);
+             animk->setEndValue(QRect((rWidth-wWidth*1.5)/2,(rHeight-wHeight*1.5)/2, wWidth*1.5, wHeight*1.5));
+             animk->setEasingCurve(QEasingCurve::InOutQuart);
+             QPropertyAnimation *anima = new QPropertyAnimation(div, "geometry");
+             anima->setDuration(1000);
+             anima->setEndValue(QRect(0,0,wWidth*1.5,div->height()));
+             anima->setEasingCurve(QEasingCurve::InOutQuart);
+         QParallelAnimationGroup *animc = new QParallelAnimationGroup();
+         animc->addAnimation(anima);
+         animc->addAnimation(animk);
+         animc->addAnimation(animb);
+     QSequentialAnimationGroup *anime = new QSequentialAnimationGroup();
+     anime->addAnimation(animf);
+     anime->addAnimation(animg);
+     anime->addAnimation(animh);
+     anime->addAnimation(animi);
+     anime->addPause(500);
+     anime->addAnimation(animc);
+     anime->start();
+     connect(anime, &QSequentialAnimationGroup::finished,[this](){signupform = new signUpForm(this, 0, this->width()*1.5, this->height()*1.5);});}

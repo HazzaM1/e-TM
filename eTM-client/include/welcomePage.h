@@ -7,6 +7,7 @@
 
 #include <signInPage.h>
 #include <signUpPage.h>
+#include <signupform.h>
 #include <navigationtab.h>
 
 #include <QPropertyAnimation>
@@ -31,12 +32,14 @@ class welcomePage : public QWidget
         signInPage *signIn = new signInPage(this, QSize(wWidth, wHeight));
         signUpPage *signUp = new signUpPage(this, QSize(wWidth, wHeight));
         navigationTab *navTab;
+        signUpForm *signupform;
         bool switchFlag = false;
 
     public slots:
+        void errorMessage(QString error);
         void switchTab();
-        void signInFailed();
         void signInSuccess();
+        void signingUp(int formID);
 };
 
 #endif // WELCOMEPAGE_H

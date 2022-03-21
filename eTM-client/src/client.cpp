@@ -12,8 +12,9 @@ client::client(int w, int h)
      connect(processManager->welcome->signIn, &signInPage::signInAttempt, this, &client::queueProcess);
      connect(processManager->mqtt, &mqttClient::incomingProcess, this, &client::queueProcess);
      connect(this, &client::pQueuePending, processManager, &manager::treatProcess);
-     connect(processManager, &manager::signInFail, processManager->welcome, &welcomePage::signInFailed);
-     connect(processManager, &manager::signInSuccess, processManager->welcome, &welcomePage::signInSuccess);}
+     connect(processManager, &manager::signInFail, processManager->welcome, &welcomePage::errorMessage);
+     connect(processManager, &manager::signInSuccess, processManager->welcome, &welcomePage::signInSuccess);
+     connect(processManager->welcome->signUp, &signUpPage::formSelected, processManager->welcome, &welcomePage::signingUp);}
 
 void client::queueProcess(Process process)
   {processQueue.enqueue(process);

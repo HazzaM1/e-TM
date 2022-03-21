@@ -43,4 +43,4 @@ void manager::authValidated(int cID)
      emit signInSuccess();}
 
 void manager::authFailed(int empty)
-    {emit signInFail();}
+    {emit signInFail("Invalid credentials");}

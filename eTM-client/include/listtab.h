@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QWidget>
 
-class listTab
+class listTab : public QWidget
 {
     Q_OBJECT
 public:

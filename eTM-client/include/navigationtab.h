@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QWidget>
 
-class navigationTab
+class navigationTab : public QWidget
 {
     Q_OBJECT
 public:

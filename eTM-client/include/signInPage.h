@@ -36,6 +36,7 @@ class signInPage : public QWidget
         void submitSignIn();
 
     signals:
+        void errorMessage(QString error);
         void signInAttempt(Process process);
 
 };

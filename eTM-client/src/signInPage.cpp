@@ -5,6 +5,7 @@ signInPage::signInPage(QWidget *widget, QSize size)
      wHeight = size.height();
      this->setParent(widget);
      initGUI();
+     connect(passwordTextBox, &QLineEdit::returnPressed, this, &signInPage::submitSignIn);
      connect(submitButton, &QPushButton::clicked , this, &signInPage::submitSignIn);}
 
 void signInPage::initGUI()
@@ -26,17 +27,16 @@ void signInPage::initGUI()
      passwordTextBox->setPlaceholderText("Enter your password");
      passwordTextBox->setEchoMode(QLineEdit::Password);
      submitButton->setFixedSize(wWidth/2.5,wHeight/13);
-     submitButton->setStyleSheet("font-weight: bold;");
      switchButton->setFixedSize(wWidth/2.5,wHeight/13);
-     switchButton->setStyleSheet("font-weight: bold;");
      this->setLayout(layout);
      this->setFocus();
-     this->setStyleSheet("QLineEdit { border-radius: 7px; }");
+     this->setStyleSheet("QLineEdit { border-radius: 7px; } QPushButton { font-weight: bold; }");
      this->adjustSize();
      this->setGeometry(wWidth/2-this->width()/2, wHeight/2-this->height()/3, this->width(), this->height());}
 
 void signInPage::submitSignIn()
     {Process process = {{'8','0','0'}, {"000", emailTextBox->text().toStdString(), passwordTextBox->text().toStdString()}};
-    if (emailRegex->match(emailTextBox->text()).hasMatch())
-        emit signInAttempt(process);
-    else qDebug() << "Email no good!";}
+    if (passwordTextBox->text() == "" && emailTextBox->text() == "")    emit errorMessage("Please enter your credentials");
+    else if (!emailRegex->match(emailTextBox->text()).hasMatch())       emit errorMessage("Please enter a valid email");
+    else if (passwordTextBox->text() == "")                             emit errorMessage("Please enter your password");
+    else                                                                emit signInAttempt(process);}
