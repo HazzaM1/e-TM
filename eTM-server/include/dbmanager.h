@@ -7,6 +7,8 @@
 #include <QtNetwork/QNetworkReply>
 #include <QEventLoop>
 
+#include <process.h>
+
 class DBmanager : public QObject
 {
     Q_OBJECT

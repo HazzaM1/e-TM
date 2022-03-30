@@ -12,6 +12,8 @@
 #include <QThread>
 
 #include <QRegularExpression>
+#include <QHostAddress>
+#include <process.h>
 
 class mqttClient : public QObject
 {   Q_OBJECT
@@ -26,7 +28,7 @@ class mqttClient : public QObject
 
         const QString placeholder_url = "https://pastebin.com/raw/YjYEUC6K";
         QHostAddress serverAddress = QHostAddress::LocalHost;
-        Process requestToProcess(QString message);
+        const Process requestToProcess(QString message);
 
         QRegularExpression *requestRegex = new QRegularExpression("([0-9]{1,3}):(.*)");
         QRegularExpression *paramsRegex = new QRegularExpression("([^:]+)");

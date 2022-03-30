@@ -64,6 +64,10 @@
 #include <QRegularExpression>
 
 #include <vector>
+#include <process.h>
+#include <QHostAddress>
+
+
 
 class mqttServer : public QObject
 {   Q_OBJECT

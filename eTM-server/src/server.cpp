@@ -7,6 +7,7 @@ server::server()
      processorThread.start();
      processManager->DB->moveToThread(&DBThread);
      DBThread.start();
+     qRegisterMetaType<Process>("Process");
      // CONNECTIONS
      connect(&processorThread, &QThread::started, processManager->mqtt, &mqttServer::init);
      connect(processManager->mqtt, &mqttServer::incomingProcess, this, &server::queueProcess);

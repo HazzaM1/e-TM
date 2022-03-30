@@ -6,7 +6,7 @@ signUpForm::signUpForm(QWidget *widget, int formID, int w, int h)
      this->setParent(widget);
      this->setGeometry(w/20,h*3/20,w*23/40,h*19/20);
      for (const field &currentField : formDetails[formID])
-        {switch(currentField.type)
+        {switch(currentField.fieldType)
             {case string:
                 {QLineEdit *aLineEdit = new QLineEdit;
                  aLineEdit->setFixedSize(wWidth*23/40,wHeight/20);

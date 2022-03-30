@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <QObject>
 // KEEP IT STD::STRING, QSTRING CAUSES ERROR
 
 const int processCodeMaxChar = 3;

@@ -25,7 +25,7 @@ void mqttClient::firstHandshake()
 // request <appID:clientID:requestCode:requestParams>
 bool mqttClient::sendRequest(std::vector<std::string> requestParam)
     {QByteArray message = QByteArray::fromStdString(std::to_string(*appID) +":"+ std::to_string(*clientID));
-     for (const std::string &param : requestParam) message.append(":"+param);
+     for (const std::string &param : requestParam) message.append(QString::fromStdString(":"+param).toUtf8());
      const QMqttTopicName topic = QMqttTopicName("CtS/"+client->clientId());
      qDebug() << "Sending " << topic.name() << " " << message;
      if (client->publish(topic, message) != -1) {return true;}
@@ -37,12 +37,14 @@ void mqttClient::incomingRequest(const QByteArray &message, const QMqttTopicName
     emit incomingProcess(requestToProcess(message));}
 
 
-Process mqttClient::requestToProcess(QString message)
+const Process mqttClient::requestToProcess(QString message)
     {Process process;
      QRegularExpressionMatch match = requestRegex->match(message);
      if (match.hasMatch() || match.hasPartialMatch())
-        {std::strcpy(process.processCode, match.captured(1).toStdString().c_str());
+        {strcpy(process.processCode, match.captured(1).toStdString().c_str());
          QRegularExpressionMatchIterator paramMatch = paramsRegex->globalMatch(match.captured(2));
          while (paramMatch.hasNext())
               process.processParam.push_back(paramMatch.next().captured(1).toStdString());}
+     for(std::string &x : process.processParam)
+     qDebug() << &x.front();
      return process;}

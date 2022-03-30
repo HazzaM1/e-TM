@@ -1,5 +1,5 @@
 #include "welcomePage.h"
-
+#include <QDebug>
 welcomePage::welcomePage(int w, int h)
     {rWidth = w;
      rHeight = h;

@@ -17,7 +17,7 @@ enum type{string, email, confirm, checkbox, date, password};
 struct field
     {std::string name;
      std::string ID;
-     type type;};
+     type fieldType;};
 
 class signUpForm : public QWidget
 {

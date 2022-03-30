@@ -27,7 +27,8 @@ void mqttServer::firstHandshake(QString channelID)
 
 bool mqttServer::sendRequest(QString channelID, std::vector<std::string> requestParam)
     {QByteArray message;
-     for (const std::string &param : requestParam) message.append(":"+param);
+     for (const std::string &param : requestParam) message.append(QString::fromStdString(":"+param).toUtf8());
+
      message.remove(0,1);
      const QMqttTopicName topic = QMqttTopicName("StC/"+channelID);
      if (client->publish(topic, message) != -1) {qDebug() << "Sending " << topic.name() << " " << message; return true;}
@@ -47,7 +48,7 @@ Process mqttServer::requestToProcess(QString message)
      if (match.hasMatch() || match.hasPartialMatch())
         {process.appID = match.captured(1).toInt();
          process.clientID = match.captured(2).toInt();
-         std::strcpy(process.processCode, match.captured(3).toStdString().c_str());
+         strcpy(process.processCode, match.captured(3).toStdString().c_str());
          QRegularExpressionMatchIterator paramMatch = paramsRegex->globalMatch(match.captured(4));
          while (paramMatch.hasNext())
               process.processParam.push_back(paramMatch.next().captured(1).toStdString());}

@@ -10,6 +10,7 @@
 #include <QGroupBox>
 #include <QVBoxLayout>
 #include <QRegularExpression>
+#include <process.h>
 
 
 class signInPage : public QWidget

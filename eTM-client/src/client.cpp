@@ -7,6 +7,7 @@ client::client(int w, int h)
      processManager->moveToThread(&processorThread);
      processManager->mqtt->moveToThread(&processorThread);
      processorThread.start();
+     qRegisterMetaType<Process>("Process");
      // CONNECTIONS
      connect(&processorThread, &QThread::started, processManager->mqtt, &mqttClient::init);
      connect(processManager->welcome->signIn, &signInPage::signInAttempt, this, &client::queueProcess);
